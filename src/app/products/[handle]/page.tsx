@@ -8,7 +8,7 @@ import { Minus, Plus, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 
 interface ProductPageProps {
-  params: { handle: string };
+  params: Promise<{ handle: string }>;
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
@@ -16,12 +16,23 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<ShopifyProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [handle, setHandle] = useState<string>('');
   const { addItem } = useCart();
 
   useEffect(() => {
+    const fetchParams = async () => {
+      const resolvedParams = await params;
+      setHandle(resolvedParams.handle);
+    };
+    fetchParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!handle) return;
+
     const fetchProduct = async () => {
       try {
-        const productData = await getProductByHandle(params.handle);
+        const productData = await getProductByHandle(handle);
         setProduct(productData);
         if (productData?.variants?.edges?.[0]?.node) {
           setSelectedVariant(productData.variants.edges[0].node);
@@ -34,7 +45,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     };
 
     fetchProduct();
-  }, [params.handle]);
+  }, [handle]);
 
   const handleAddToCart = () => {
     if (product && selectedVariant) {
