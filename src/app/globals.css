@@ -1,27 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+  }
+  
+  body {
+    background-color: #F8F5F1;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(212, 163, 115, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(122, 75, 46, 0.02) 0%, transparent 50%);
+    color: #2B2A28;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', serif;
+    line-height: 1.2;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 text-white px-6 py-3 rounded-full font-medium shadow-soft hover:bg-primary-600 hover:shadow-warm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 min-h-[44px] flex items-center justify-center;
+  }
+  
+  .btn-secondary {
+    @apply bg-linen text-ink px-6 py-3 rounded-full font-medium shadow-soft hover:bg-primary-200 hover:shadow-warm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 min-h-[44px] flex items-center justify-center;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-soft border border-primary-200 overflow-hidden;
+  }
+  
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
 }
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+

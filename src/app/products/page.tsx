@@ -11,24 +11,27 @@ export default async function ProductsPage() {
   const products = productsData?.edges?.map((edge: { node: ShopifyProduct }) => edge.node) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Alle Producten</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Ontdek onze uitgebreide collectie van premium noten, zaden en zuidvruchten.
+    <div className="min-h-screen">
+      <div className="container-max section-padding">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-display font-bold text-ink mb-6 text-balance">Alle Producten</h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+            Ontdek onze uitgebreide collectie van premium noten, zaden en zuidvruchten. 
+            Vers gebrand en zorgvuldig geselecteerd voor de beste kwaliteit.
           </p>
         </div>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product: ShopifyProduct) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {products.map((product: ShopifyProduct, index: number) => (
+              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="text-gray-500 text-lg">
+          <div className="text-center py-16">
+            <div className="text-muted text-lg">
               {productsData ? (
                 <p>Geen producten gevonden in je Shopify store.</p>
               ) : (

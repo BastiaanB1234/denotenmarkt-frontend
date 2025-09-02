@@ -56,10 +56,10 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Product laden...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-muted">Product laden...</p>
         </div>
       </div>
     );
@@ -67,10 +67,10 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Product niet gevonden</h1>
-          <Link href="/products" className="text-blue-600 hover:text-blue-800">
+          <h1 className="text-3xl font-display font-bold text-ink mb-4">Product niet gevonden</h1>
+          <Link href="/products" className="text-primary-600 hover:text-primary-700 font-medium">
             Terug naar producten
           </Link>
         </div>
@@ -82,12 +82,12 @@ export default function ProductPage({ params }: ProductPageProps) {
   const variants = product.variants?.edges?.map(edge => edge.node) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+    <div className="min-h-screen">
+      <div className="container-max section-padding">
+        <div className="card">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8">
             {/* Product Image */}
-            <div className="relative aspect-square overflow-hidden rounded-lg">
+            <div className="relative aspect-square overflow-hidden rounded-2xl border border-primary-200">
               {firstImage ? (
                 <Image
                   src={firstImage.url}
@@ -96,41 +96,41 @@ export default function ProductPage({ params }: ProductPageProps) {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-400">Geen afbeelding</span>
+                <div className="w-full h-full bg-linen flex items-center justify-center">
+                  <span className="text-muted">Geen afbeelding</span>
                 </div>
               )}
             </div>
 
             {/* Product Details */}
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.title}</h1>
-                <p className="text-gray-600">{product.description}</p>
+                <h1 className="text-4xl font-display font-bold text-ink mb-4">{product.title}</h1>
+                <p className="text-muted leading-relaxed text-lg">{product.description}</p>
               </div>
 
               {/* Price */}
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-3xl font-display font-bold text-primary-600">
                 €{selectedVariant?.price?.amount || product.priceRange?.minVariantPrice?.amount}
               </div>
 
               {/* Variant Selection */}
               {variants.length > 1 && (
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Variant</h3>
-                  <div className="grid grid-cols-2 gap-3">
+                  <h3 className="text-xl font-display font-semibold text-ink mb-4">Variant</h3>
+                  <div className="grid grid-cols-1 gap-3">
                     {variants.map((variant) => (
                       <button
                         key={variant.id}
                         onClick={() => setSelectedVariant(variant)}
-                        className={`p-3 border rounded-lg text-left transition-colors ${
+                        className={`p-4 border rounded-xl text-left transition-all duration-300 ${
                           selectedVariant?.id === variant.id
-                            ? 'border-blue-600 bg-blue-50'
-                            : 'border-gray-300 hover:border-gray-400'
+                            ? 'border-primary-500 bg-primary-50 shadow-soft'
+                            : 'border-primary-200 hover:border-primary-300 hover:bg-primary-50'
                         }`}
                       >
-                        <div className="font-medium">{variant.title}</div>
-                        <div className="text-sm text-gray-600">€{variant.price.amount}</div>
+                        <div className="font-display font-medium text-ink">{variant.title}</div>
+                        <div className="text-sm text-muted">€{variant.price.amount}</div>
                       </button>
                     ))}
                   </div>
@@ -139,20 +139,20 @@ export default function ProductPage({ params }: ProductPageProps) {
 
               {/* Quantity */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Aantal</h3>
-                <div className="flex items-center space-x-3">
+                <h3 className="text-xl font-display font-semibold text-ink mb-4">Aantal</h3>
+                <div className="flex items-center space-x-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="p-3 border border-primary-200 rounded-full hover:bg-primary-100 transition-colors"
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-5 w-5 text-primary-600" />
                   </button>
-                  <span className="text-lg font-medium w-12 text-center">{quantity}</span>
+                  <span className="text-xl font-medium w-16 text-center text-ink">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="p-3 border border-primary-200 rounded-full hover:bg-primary-100 transition-colors"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-5 w-5 text-primary-600" />
                   </button>
                 </div>
               </div>
@@ -161,16 +161,16 @@ export default function ProductPage({ params }: ProductPageProps) {
               <button
                 onClick={handleAddToCart}
                 disabled={!selectedVariant}
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="btn-primary w-full text-lg py-4"
               >
-                <ShoppingCart className="h-5 w-5" />
+                <ShoppingCart className="h-6 w-6 mr-2" />
                 <span>Toevoegen aan winkelwagen</span>
               </button>
 
               {/* Back to Products */}
               <Link
                 href="/products"
-                className="block text-center text-blue-600 hover:text-blue-800 font-medium"
+                className="block text-center text-primary-600 hover:text-primary-700 font-medium"
               >
                 ← Terug naar producten
               </Link>

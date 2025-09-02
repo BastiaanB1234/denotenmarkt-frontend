@@ -24,7 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="card group hover:shadow-warm transition-all duration-300 animate-fade-in">
       <Link href={`/products/${product.handle}`}>
         <div className="relative aspect-square overflow-hidden">
           {firstImage ? (
@@ -32,36 +32,38 @@ export default function ProductCard({ product }: ProductCardProps) {
               src={firstImage.url}
               alt={firstImage.altText || product.title}
               fill
-              className="object-cover hover:scale-105 transition-transform duration-300"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400">Geen afbeelding</span>
+            <div className="w-full h-full bg-linen flex items-center justify-center">
+              <span className="text-muted">Geen afbeelding</span>
             </div>
           )}
+          {/* Subtle overlay on hover */}
+          <div className="absolute inset-0 bg-primary-900/0 group-hover:bg-primary-900/10 transition-colors duration-300"></div>
         </div>
       </Link>
 
-      <div className="p-4">
+      <div className="p-6">
         <Link href={`/products/${product.handle}`}>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-display font-semibold text-ink mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
             {product.title}
           </h3>
         </Link>
         
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+        <p className="text-muted text-sm mb-4 line-clamp-2 leading-relaxed">
           {product.description}
         </p>
 
         <div className="flex items-center justify-between">
-          <div className="text-lg font-bold text-blue-600">
+          <div className="text-xl font-display font-semibold text-primary-600">
             €{product.priceRange?.minVariantPrice?.amount || '0.00'}
           </div>
 
           <button
             onClick={handleAddToCart}
             disabled={!firstVariant}
-            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="p-3 rounded-full bg-primary-500 text-white hover:bg-primary-600 disabled:bg-muted disabled:cursor-not-allowed transition-all duration-300 shadow-soft hover:shadow-warm group-hover:scale-105"
             title="Toevoegen aan winkelwagen"
           >
             <ShoppingCart className="h-5 w-5" />
