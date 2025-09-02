@@ -10,25 +10,25 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          50: '#F8F5F1',
-          100: '#EFE9E2',
-          200: '#E6DFD6',
-          300: '#D4A373',
-          400: '#9B8C80',
-          500: '#7A4B2E',
-          600: '#6B4129',
-          700: '#5A3623',
-          800: '#4A2C1E',
-          900: '#2B2A28',
+          50: '#FEFCFB',
+          100: '#F9F5F3',
+          200: '#F2EBE6',
+          300: '#E8DDD6',
+          400: '#DCC9BE',
+          500: '#D0B5A6',
+          600: '#C19F8E',
+          700: '#B08875',
+          800: '#9A7262',
+          900: '#7D5D51',
         },
-        accent: '#D4A373',
+        accent: '#E8DDD6',
         cream: '#F8F5F1',
         linen: '#EFE9E2',
         ink: '#2B2A28',
         muted: '#9B8C80',
       },
       fontFamily: {
-        'display': ['Fraunces', 'serif'],
+        'display': ['Inter', 'sans-serif'], // Changed to lighter Inter
         'body': ['Inter', 'sans-serif'],
       },
       borderRadius: {
@@ -37,9 +37,9 @@ const config: Config = {
         '3xl': '2rem',
       },
       boxShadow: {
-        'soft': '0 4px 20px -2px rgba(122, 75, 46, 0.08)',
-        'warm': '0 8px 32px -4px rgba(122, 75, 46, 0.12)',
-        'lift': '0 12px 40px -6px rgba(122, 75, 46, 0.15)',
+        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.05), 0 10px 20px -2px rgba(0, 0, 0, 0.03)',
+        'warm': '0 4px 20px -2px rgba(208, 181, 166, 0.08), 0 2px 8px -2px rgba(208, 181, 166, 0.05)',
+        'lift': '0 8px 32px -4px rgba(208, 181, 166, 0.1), 0 4px 16px -2px rgba(208, 181, 166, 0.06)',
       },
       spacing: {
         '18': '4.5rem',

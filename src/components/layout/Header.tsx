@@ -38,7 +38,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <div className="text-xl md:text-2xl font-display font-semibold text-primary-600 group-hover:text-primary-700 transition-colors">
+            <div className="text-lg md:text-xl font-display font-medium text-primary-600 group-hover:text-primary-700 transition-colors">
               De Notenmarkt
             </div>
           </Link>
@@ -49,10 +49,10 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-ink hover:text-primary-600 transition-colors font-medium relative group"
+                className="text-ink hover:text-primary-600 transition-colors font-normal relative group"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-500 group-hover:w-full transition-all duration-300"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-400 group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
           </nav>
@@ -60,21 +60,21 @@ export default function Header() {
           {/* Right side actions */}
           <div className="flex items-center space-x-3">
             {/* Search */}
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <Search className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="hidden md:flex text-ink hover:text-primary-600 hover:bg-primary-50/50">
+              <Search className="h-4 w-4" />
             </Button>
 
             {/* Favorites */}
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <Heart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="hidden md:flex text-ink hover:text-primary-600 hover:bg-primary-50/50">
+              <Heart className="h-4 w-4" />
             </Button>
 
             {/* Cart */}
             <Link href="/cart">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative text-ink hover:text-primary-600 hover:bg-primary-50/50">
+                <ShoppingCart className="h-4 w-4" />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-primary-400 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-normal">
                     {cartItemCount}
                   </span>
                 )}
@@ -82,8 +82,8 @@ export default function Header() {
             </Link>
 
             {/* User Account */}
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <User className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="hidden md:flex text-ink hover:text-primary-600 hover:bg-primary-50/50">
+              <User className="h-4 w-4" />
             </Button>
 
             {/* Mobile menu button */}
