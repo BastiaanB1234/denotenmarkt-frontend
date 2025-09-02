@@ -12,7 +12,6 @@
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.1.5",
-    "@shopify/hydrogen-react": "^2025.5.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "lucide-react": "^0.468.0",

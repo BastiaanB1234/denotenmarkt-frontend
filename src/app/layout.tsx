@@ -1,22 +1,21 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { CartProvider } from '@/contexts/CartContext'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { CartProvider } from '@/contexts/CartContext';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'ShopName - Jouw Online Webshop',
-  description: 'Ontdek onze uitgebreide collectie van kwaliteitsproducten. Snelle verzending en uitstekende service.',
-  keywords: 'webshop, online shopping, producten, verzending',
-}
+  title: 'De Notenmarkt - Premium noten en zuidvruchten',
+  description: 'Premium noten, zaden en zuidvruchten. Vers gebrand en zorgvuldig geselecteerd voor de beste kwaliteit.',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="nl">
@@ -32,5 +31,5 @@ export default function RootLayout({
         </CartProvider>
       </body>
     </html>
-  )
+  );
 }
