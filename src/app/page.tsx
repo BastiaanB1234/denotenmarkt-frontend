@@ -26,13 +26,12 @@ export default async function HomePage() {
         {/* Hero Content */}
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <div className="mb-8">
-            <Image
-              src="/images/hero-nuts.jpg"
-              alt="Premium noten en zuidvruchten"
-              width={300}
-              height={300}
-              className="mx-auto rounded-2xl shadow-warm mb-6"
-            />
+            <div className="w-64 h-64 mx-auto rounded-2xl shadow-warm mb-6 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-white/80 text-center">
+                <Award className="h-16 w-16 mx-auto mb-4" />
+                <p className="text-lg font-medium">Premium Noten</p>
+              </div>
+            </div>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight">

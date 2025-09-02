@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { CartProvider } from '@/contexts/CartContext';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'De Notenmarkt - Premium noten en zuidvruchten',
@@ -19,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="nl">
-      <body className={inter.className}>
+      <body>
         <CartProvider>
           <div className="min-h-screen flex flex-col">
             <Header />
