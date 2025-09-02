@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { getProductByHandle } from '@/lib/shopify';
 import { ShopifyProduct, ShopifyProductVariant } from '@/types/shopify';
 import { useCart } from '@/contexts/CartContext';
@@ -88,10 +89,11 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Product Image */}
             <div className="relative aspect-square overflow-hidden rounded-lg">
               {firstImage ? (
-                <img
+                <Image
                   src={firstImage.url}
                   alt={firstImage.altText || product.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">

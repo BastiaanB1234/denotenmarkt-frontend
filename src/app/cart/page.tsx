@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 
@@ -42,12 +43,13 @@ export default function CartPage() {
                     <div className="flex items-center space-x-4">
                       {/* Product Image */}
                       <div className="flex-shrink-0">
-                        <div className="w-20 h-20 rounded-lg overflow-hidden">
+                        <div className="w-20 h-20 rounded-lg overflow-hidden relative">
                           {firstImage ? (
-                            <img
+                            <Image
                               src={firstImage.url}
                               alt={firstImage.altText || item.product.title}
-                              className="w-full h-full object-cover"
+                              fill
+                              className="object-cover"
                             />
                           ) : (
                             <div className="w-full h-full bg-gray-200 flex items-center justify-center">

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import { ShopifyProduct } from '@/types/shopify';
 import { useCart } from '@/contexts/CartContext';
@@ -27,10 +28,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.handle}`}>
         <div className="relative aspect-square overflow-hidden">
           {firstImage ? (
-            <img
+            <Image
               src={firstImage.url}
               alt={firstImage.altText || product.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
