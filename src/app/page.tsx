@@ -2,13 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
 import { getProducts, getShopInfo } from '@/lib/shopify';
+import { ShopifyProduct } from '@/types/shopify';
 
 export default async function HomePage() {
   // Haal echte data op van Shopify
   const shopInfo = await getShopInfo();
   const productsData = await getProducts(4); // Toon 4 producten op homepage
-  
-  const products = productsData?.edges?.map(edge => edge.node) || [];
+
+  const products = productsData?.edges?.map((edge: { node: ShopifyProduct }) => edge.node) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -23,14 +24,14 @@ export default async function HomePage() {
               {shopInfo?.description || 'Premium noten, zaden en zuidvruchten. Vers gebrand en zorgvuldig geselecteerd voor de beste kwaliteit.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/products" 
+              <Link
+                href="/products"
                 className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Bekijk Producten
               </Link>
-              <Link 
-                href="/cart" 
+              <Link
+                href="/cart"
                 className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
               >
                 Winkelwagen
@@ -72,8 +73,8 @@ export default async function HomePage() {
 
           {products.length > 0 && (
             <div className="text-center mt-12">
-              <Link 
-                href="/products" 
+              <Link
+                href="/products"
                 className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Bekijk Alle Producten
@@ -96,7 +97,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Vers Gebrand</h3>
               <p className="text-gray-600">Al onze noten worden vers gebrand voor de beste smaak en kwaliteit.</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +107,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Gezond & Natuurlijk</h3>
               <p className="text-gray-600">100% natuurlijke producten zonder kunstmatige toevoegingen.</p>
             </div>
-            
+
             <div className="text-center">
               <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
