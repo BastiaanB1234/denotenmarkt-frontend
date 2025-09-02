@@ -17,7 +17,7 @@ export default async function HomePage() {
       {/* Hero Section - Mobile First */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background with texture */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-primary-300 via-primary-400 to-primary-500">
+                       <div className="absolute inset-0 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700">
           <div className="absolute inset-0 opacity-20" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
@@ -34,7 +34,7 @@ export default async function HomePage() {
             </div>
           </div>
           
-                           <h1 className="text-3xl md:text-5xl font-display font-medium text-white mb-6 leading-tight">
+                           <h1 className="text-3xl md:text-5xl font-display font-semibold text-white mb-6 leading-tight">
                    {shopInfo?.name || 'De Notenmarkt'}
                  </h1>
           
@@ -43,11 +43,13 @@ export default async function HomePage() {
           </p>
 
                            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                   <Button size="lg" className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30">
-                     <ShoppingBag className="mr-2 h-5 w-5" />
-                     Bekijk Producten
-                   </Button>
-                   <Button variant="outline" size="lg" className="w-full sm:w-auto border-white/50 text-white hover:bg-white/10">
+                   <Link href="/products">
+                     <Button size="lg" className="w-full sm:w-auto bg-white text-primary-700 hover:bg-primary-50 border border-white/20">
+                       <ShoppingBag className="mr-2 h-5 w-5" />
+                       Bekijk Producten
+                     </Button>
+                   </Link>
+                   <Button variant="outline" size="lg" className="w-full sm:w-auto border-white/70 text-white hover:bg-white/20">
                      <Heart className="mr-2 h-5 w-5" />
                      Favorieten
                    </Button>
@@ -82,10 +84,10 @@ export default async function HomePage() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
                            <div className="text-center mb-12">
-                   <h2 className="text-2xl md:text-3xl font-display font-medium text-ink mb-4">
+                   <h2 className="text-2xl md:text-3xl font-display font-semibold text-ink mb-4">
                      Uitgelichte Producten
                    </h2>
-                   <p className="text-muted text-base max-w-2xl mx-auto">
+                   <p className="text-ink/70 text-base max-w-2xl mx-auto">
                      Ontdek onze meest populaire noten en zuidvruchten, vers gebrand en klaar voor jou.
                    </p>
                  </div>
@@ -106,13 +108,15 @@ export default async function HomePage() {
             </div>
           )}
 
-          {products.length > 0 && (
-            <div className="text-center mt-12">
-              <Button size="lg">
-                Bekijk Alle Producten
-              </Button>
-            </div>
-          )}
+                           {products.length > 0 && (
+                   <div className="text-center mt-12">
+                     <Link href="/products">
+                       <Button size="lg" className="bg-primary-500 text-white hover:bg-primary-600">
+                         Bekijk Alle Producten
+                       </Button>
+                     </Link>
+                   </div>
+                 )}
         </div>
       </section>
 
@@ -124,8 +128,8 @@ export default async function HomePage() {
                      <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform duration-300">
                        <Award className="h-6 w-6 text-primary-500" />
                      </div>
-                     <h3 className="text-lg font-display font-medium text-ink mb-3">Vers Gebrand</h3>
-                     <p className="text-muted leading-relaxed text-sm">
+                     <h3 className="text-lg font-display font-semibold text-ink mb-3">Vers Gebrand</h3>
+                     <p className="text-ink/70 leading-relaxed text-sm">
                        Al onze noten worden vers gebrand voor de beste smaak en kwaliteit.
                      </p>
                    </div>
@@ -134,8 +138,8 @@ export default async function HomePage() {
                      <div className="bg-accent/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform duration-300">
                        <Heart className="h-6 w-6 text-primary-600" />
                      </div>
-                     <h3 className="text-lg font-display font-medium text-ink mb-3">Gezond & Natuurlijk</h3>
-                     <p className="text-muted leading-relaxed text-sm">
+                     <h3 className="text-lg font-display font-semibold text-ink mb-3">Gezond & Natuurlijk</h3>
+                     <p className="text-ink/70 leading-relaxed text-sm">
                        100% natuurlijke producten zonder kunstmatige toevoegingen.
                      </p>
                    </div>
@@ -144,8 +148,8 @@ export default async function HomePage() {
                      <div className="bg-primary-200/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform duration-300">
                        <Clock className="h-6 w-6 text-primary-600" />
                      </div>
-                     <h3 className="text-lg font-display font-medium text-ink mb-3">Snelle Levering</h3>
-                     <p className="text-muted leading-relaxed text-sm">
+                     <h3 className="text-lg font-display font-semibold text-ink mb-3">Snelle Levering</h3>
+                     <p className="text-ink/70 leading-relaxed text-sm">
                        Bestel vandaag en ontvang je producten binnen 1-2 werkdagen.
                      </p>
                    </div>
@@ -154,22 +158,26 @@ export default async function HomePage() {
       </section>
 
                    {/* CTA Section */}
-             <section className="bg-primary-200 py-16 px-4">
+             <section className="bg-primary-300 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-medium text-ink mb-6">
+          <h2 className="text-3xl md:text-4xl font-display font-semibold text-ink mb-6">
             Klaar om te beginnen?
           </h2>
-          <p className="text-muted text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-ink/80 text-lg mb-8 max-w-2xl mx-auto">
             Ontdek onze uitgebreide collectie van premium noten en zuidvruchten. 
             Vers gebrand en zorgvuldig geselecteerd voor de beste kwaliteit.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto border-primary-400 text-primary-700 hover:bg-primary-100">
-              Bekijk Producten
-            </Button>
-            <Button size="lg" className="w-full sm:w-auto bg-primary-500 text-white hover:bg-primary-600">
-              Account Aanmaken
-            </Button>
+            <Link href="/products">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto border-primary-400 text-primary-700 hover:bg-primary-100">
+                Bekijk Producten
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button size="lg" className="w-full sm:w-auto bg-primary-500 text-white hover:bg-primary-600">
+                Contact
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
