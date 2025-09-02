@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/cart/page": "/cart",
+  "/debug-shopify/page": "/debug-shopify",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/products/[handle]/page": "/products/[handle]",
+  "/products/page": "/products",
+  "/test-api/page": "/test-api",
+  "/test-shopify/page": "/test-shopify"
+}
