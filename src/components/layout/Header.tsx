@@ -38,7 +38,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <div className="text-lg md:text-xl font-display font-medium text-primary-600 group-hover:text-primary-700 transition-colors">
+            <div className="text-xl md:text-2xl font-display font-medium text-primary-600 group-hover:text-primary-700 transition-colors">
               De Notenmarkt
             </div>
           </Link>
