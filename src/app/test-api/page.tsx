@@ -1,156 +1,120 @@
-import React from 'react';
-import { getProducts, getCollections, getShopInfo } from '@/lib/shopify';
+'use client';
 
-export default async function TestApiPage() {
-  const storeDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-  const accessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+import React, { useEffect, useState } from 'react';
+import { getShopInfo, getProducts, getCollections } from '@/lib/shopify';
+import { ShopifyShop, ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 
-  // Test de API direct
-  let shopResult = null;
-  let productsResult = null;
-  let collectionsResult = null;
-  let apiError = null;
+export default function TestApiPage() {
+  const [shopInfo, setShopInfo] = useState<ShopifyShop | null>(null);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  try {
-    // Test eerst de eenvoudige shop query
-    shopResult = await getShopInfo();
-    productsResult = await getProducts(5);
-    collectionsResult = await getCollections(5);
-  } catch (error) {
-    apiError = error;
+  useEffect(() => {
+    const testAPI = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Test shop info
+        const shop = await getShopInfo();
+        setShopInfo(shop);
+
+        // Test products
+        const productsData = await getProducts(5);
+        if (productsData?.edges) {
+          setProducts(productsData.edges.map(edge => edge.node));
+        }
+
+        // Test collections
+        const collectionsData = await getCollections(5);
+        if (collectionsData?.edges) {
+          setCollections(collectionsData.edges.map(edge => edge.node));
+        }
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Onbekende fout');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    testAPI();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">API testen...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">API Configuratie Test</h1>
-        
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Environment Variables</h2>
-          <div className="space-y-4">
-            <div>
-              <strong>Store Domain:</strong> 
-              <span className="ml-2 font-mono bg-gray-100 px-2 py-1 rounded">
-                {storeDomain || 'Niet geconfigureerd'}
-              </span>
-            </div>
-            <div>
-              <strong>Access Token:</strong> 
-              <span className="ml-2 font-mono bg-gray-100 px-2 py-1 rounded">
-                {accessToken ? `${accessToken.substring(0, 8)}...` : 'Niet geconfigureerd'}
-              </span>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">API Test</h1>
 
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">API URL Test</h2>
-          <p className="text-gray-600 mb-4">
-            De Shopify API URL zou moeten zijn:
-          </p>
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <code className="text-sm">
-              https://{storeDomain}/api/2025-01/graphql.json
-            </code>
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+            <h2 className="text-lg font-semibold text-red-800 mb-2">Error</h2>
+            <p className="text-red-700">{error}</p>
           </div>
-        </div>
+        )}
 
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">API Test Resultaten</h2>
-          
-          {apiError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-              <h3 className="text-lg font-semibold text-red-900 mb-2">API Error:</h3>
-              <pre className="text-sm text-red-800 bg-red-100 p-3 rounded overflow-auto">
-                {JSON.stringify(apiError, null, 2)}
-              </pre>
+        {/* Shop Info */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Shop Informatie</h2>
+          {shopInfo ? (
+            <div className="space-y-2">
+              <p><strong>Naam:</strong> {shopInfo.name}</p>
+              <p><strong>Beschrijving:</strong> {shopInfo.description}</p>
+              <p><strong>Domein:</strong> {shopInfo.primaryDomain.host}</p>
             </div>
+          ) : (
+            <p className="text-gray-500">Geen shop informatie beschikbaar</p>
           )}
-
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Shop Info Test:</h3>
-              {shopResult ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-green-800 font-semibold">✅ Shop info succesvol opgehaald!</p>
-                  <div className="mt-3">
-                    <p className="text-green-700 text-sm font-semibold">Shop Details:</p>
-                    <pre className="text-xs bg-green-100 p-2 rounded mt-1 overflow-auto">
-                      {JSON.stringify(shopResult, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-yellow-800">⚠️ Shop info niet gevonden of API error</p>
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Producten Test:</h3>
-              {productsResult ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-green-800 font-semibold">✅ Producten succesvol opgehaald!</p>
-                  <p className="text-green-700 text-sm mt-2">
-                    Aantal producten: {productsResult.edges?.length || 0}
-                  </p>
-                  {productsResult.edges && productsResult.edges.length > 0 && (
-                    <div className="mt-3">
-                      <p className="text-green-700 text-sm font-semibold">Eerste product:</p>
-                      <pre className="text-xs bg-green-100 p-2 rounded mt-1 overflow-auto">
-                        {JSON.stringify(productsResult.edges[0].node, null, 2)}
-                      </pre>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-yellow-800">⚠️ Geen producten gevonden of API error</p>
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Collecties Test:</h3>
-              {collectionsResult ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-green-800 font-semibold">✅ Collecties succesvol opgehaald!</p>
-                  <p className="text-green-700 text-sm mt-2">
-                    Aantal collecties: {collectionsResult.edges?.length || 0}
-                  </p>
-                </div>
-              ) : (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-yellow-800">⚠️ Geen collecties gevonden of API error</p>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4 text-blue-900">Volgende Stappen</h2>
-          <ol className="list-decimal list-inside space-y-2 text-blue-800">
-            <li>Controleer of je store domain correct is</li>
-            <li>Controleer of je access token geldig is</li>
-            <li>Voeg producten toe aan je Shopify store</li>
-            <li>Test de API verbinding</li>
-          </ol>
+        {/* Products */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Producten ({products.length})</h2>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products.map((product) => (
+                <div key={product.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{product.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+                  <p className="text-blue-600 font-medium">
+                    €{product.priceRange.minVariantPrice.amount}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Geen producten gevonden</p>
+          )}
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-8">
-          <h2 className="text-xl font-semibold mb-4 text-yellow-900">Mogelijke Oplossingen</h2>
-          <div className="space-y-2 text-yellow-800">
-            <p><strong>1. Store Domain:</strong> Probeer deze opties:</p>
-            <ul className="list-disc list-inside ml-4 space-y-1">
-              <li><code>denotenmarkt.myshopify.com</code></li>
-              <li><code>www.denotenmarkt.nl</code></li>
-              <li><code>denotenmarkt.nl</code></li>
-            </ul>
-            <p><strong>2. Access Token:</strong> Controleer of de token nog geldig is</p>
-            <p><strong>3. Producten:</strong> Voeg producten toe aan je Shopify store</p>
-          </div>
+        {/* Collections */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Collecties ({collections.length})</h2>
+          {collections.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {collections.map((collection) => (
+                <div key={collection.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{collection.title}</h3>
+                  <p className="text-sm text-gray-600">{collection.description}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Geen collecties gevonden</p>
+          )}
         </div>
       </div>
     </div>

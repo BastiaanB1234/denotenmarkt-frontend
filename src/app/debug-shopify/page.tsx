@@ -1,75 +1,69 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { getShopInfo } from '@/lib/shopify';
+import { ShopifyShop } from '@/types/shopify';
 
 export default function DebugShopifyPage() {
-  const storeDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-  const accessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+  const [shopInfo, setShopInfo] = useState<ShopifyShop | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const testDomains = [
-    'denotenmarkt.nl',
-    'denotenmarkt.myshopify.com',
-    'www.denotenmarkt.nl'
-  ];
+  useEffect(() => {
+    const debugShopify = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const shop = await getShopInfo();
+        setShopInfo(shop);
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Onbekende fout');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    debugShopify();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Shopify debuggen...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopify Debug</h1>
-        
-        {/* Environment Variables */}
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Environment Variables</h2>
-          <div className="space-y-2">
-            <div>
-              <strong>Store Domain:</strong> {storeDomain || 'Niet geconfigureerd'}
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+            <h2 className="text-lg font-semibold text-red-800 mb-2">Error</h2>
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* Shop Info */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Shop Informatie</h2>
+          {shopInfo ? (
+            <div className="space-y-2">
+              <p><strong>Naam:</strong> {shopInfo.name}</p>
+              <p><strong>Beschrijving:</strong> {shopInfo.description}</p>
+              <p><strong>Domein:</strong> {shopInfo.primaryDomain.host}</p>
+              <p><strong>URL:</strong> {shopInfo.primaryDomain.url}</p>
             </div>
-            <div>
-              <strong>Access Token:</strong> {accessToken ? 'Geconfigureerd' : 'Niet geconfigureerd'}
-            </div>
-          </div>
-        </div>
-
-        {/* Test Domains */}
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Test Domains</h2>
-          <p className="text-gray-600 mb-4">
-            Probeer deze store domains in je .env.local bestand:
-          </p>
-          <div className="space-y-2">
-            {testDomains.map((domain, index) => (
-              <div key={index} className="p-3 border border-gray-200 rounded-lg">
-                <code className="text-sm bg-gray-100 px-2 py-1 rounded">
-                  NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN={domain}
-                </code>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4 text-blue-900">Instructies</h2>
-          <ol className="list-decimal list-inside space-y-2 text-blue-800">
-            <li>Open je <code>.env.local</code> bestand</li>
-            <li>Vervang de store domain met een van de bovenstaande opties</li>
-            <li>Herstart je development server: <code>npm run dev</code></li>
-            <li>Ga naar <code>/test-shopify</code> om te testen</li>
-            <li>Als het werkt, zie je je producten en collecties</li>
-          </ol>
-        </div>
-
-        {/* Current Configuration */}
-        <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Huidige Configuratie</h2>
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <pre className="text-sm overflow-auto">
-{`# Shopify Storefront API Configuration
-NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN=${storeDomain || 'your-store-domain'}
-NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=${accessToken ? '846acd8da631d118010f043cfb4333ac' : 'your-access-token'}
-
-# Next.js Configuration
-NEXT_PUBLIC_SITE_URL=http://localhost:3000`}
-            </pre>
-          </div>
+          ) : (
+            <p className="text-gray-500">Geen shop informatie beschikbaar</p>
+          )}
         </div>
       </div>
     </div>

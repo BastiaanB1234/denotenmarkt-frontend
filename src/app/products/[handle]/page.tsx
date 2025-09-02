@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getProductByHandle } from '@/lib/shopify';
-import { ShopifyProduct } from '@/types/shopify';
+import { ShopifyProduct, ShopifyProductVariant } from '@/types/shopify';
 import { useCart } from '@/contexts/CartContext';
 import { Minus, Plus, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [selectedVariant, setSelectedVariant] = useState<ShopifyProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
 

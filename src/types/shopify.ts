@@ -1,28 +1,17 @@
-export interface ShopifyImage {
-  id: string;
-  url: string;
-  altText?: string;
-}
-
-export interface ShopifyPrice {
-  amount: string;
-  currencyCode: string;
-}
-
-export interface ShopifyPriceRange {
-  minVariantPrice: ShopifyPrice;
-  maxVariantPrice: ShopifyPrice;
-}
-
-export interface ShopifyVariant {
+export interface ShopifyProductVariant {
   id: string;
   title: string;
-  price: ShopifyPrice;
+  price: {
+    amount: string;
+    currencyCode: string;
+  };
   availableForSale: boolean;
-  selectedOptions?: {
-    name: string;
-    value: string;
-  }[];
+}
+
+export interface ShopifyProductImage {
+  id: string;
+  url: string;
+  altText: string | null;
 }
 
 export interface ShopifyProduct {
@@ -31,21 +20,39 @@ export interface ShopifyProduct {
   handle: string;
   description: string;
   images: {
-    edges: {
-      node: ShopifyImage;
-    }[];
+    edges: Array<{
+      node: ShopifyProductImage;
+    }>;
   };
-  priceRange: ShopifyPriceRange;
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
   variants: {
-    edges: {
-      node: ShopifyVariant;
-    }[];
+    edges: Array<{
+      node: ShopifyProductVariant;
+    }>;
   };
-  options?: {
+  options?: Array<{
     id: string;
     name: string;
     values: string[];
-  }[];
+  }>;
+}
+
+export interface ShopifyShop {
+  name: string;
+  description: string;
+  primaryDomain: {
+    url: string;
+    host: string;
+  };
 }
 
 export interface ShopifyCollection {
@@ -53,8 +60,10 @@ export interface ShopifyCollection {
   title: string;
   handle: string;
   description: string;
-  image?: ShopifyImage;
-  productsCount: number;
+  image?: {
+    url: string;
+    altText: string | null;
+  };
 }
 
 export interface ShopifyProductsResponse {
@@ -65,31 +74,16 @@ export interface ShopifyProductsResponse {
       startCursor: string;
       endCursor: string;
     };
-    edges: {
+    edges: Array<{
       node: ShopifyProduct;
-    }[];
+    }>;
   };
 }
 
 export interface ShopifyCollectionsResponse {
   collections: {
-    edges: {
+    edges: Array<{
       node: ShopifyCollection;
-    }[];
+    }>;
   };
-}
-
-export interface CartItem {
-  id: string;
-  title: string;
-  price: ShopifyPrice;
-  quantity: number;
-  image?: ShopifyImage;
-  variantId: string;
-}
-
-export interface Cart {
-  items: CartItem[];
-  total: number;
-  itemCount: number;
 }

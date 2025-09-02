@@ -1,100 +1,120 @@
-import React from 'react';
-import { getProducts, getCollections } from '@/lib/shopify';
+'use client';
 
-export default async function TestShopifyPage() {
-  let productsData = null;
-  let collectionsData = null;
-  let error = null;
+import React, { useEffect, useState } from 'react';
+import { getShopInfo, getProducts, getCollections } from '@/lib/shopify';
+import { ShopifyShop, ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 
-  try {
-    // Test producten ophalen
-    productsData = await getProducts(5);
-    
-    // Test collecties ophalen
-    collectionsData = await getCollections(5);
-  } catch (err) {
-    error = err;
-    console.error('Shopify API Error:', err);
+export default function TestShopifyPage() {
+  const [shopInfo, setShopInfo] = useState<ShopifyShop | null>(null);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const testShopifyAPI = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Test shop info
+        const shop = await getShopInfo();
+        setShopInfo(shop);
+
+        // Test products
+        const productsData = await getProducts(5);
+        if (productsData?.edges) {
+          setProducts(productsData.edges.map(edge => edge.node));
+        }
+
+        // Test collections
+        const collectionsData = await getCollections(5);
+        if (collectionsData?.edges) {
+          setCollections(collectionsData.edges.map(edge => edge.node));
+        }
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Onbekende fout');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    testShopifyAPI();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Shopify API testen...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopify API Test</h1>
-        
-        {/* Environment Variables Check */}
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">Environment Variables</h2>
-          <div className="space-y-2">
-            <div>
-              <strong>Store Domain:</strong> {process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'Niet geconfigureerd'}
-            </div>
-            <div>
-              <strong>Access Token:</strong> {process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN ? 'Geconfigureerd' : 'Niet geconfigureerd'}
-            </div>
-          </div>
-        </div>
 
-        {/* API Test Results */}
-        <div className="bg-white rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">API Test Results</h2>
-          
-          {error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="text-red-800 font-semibold mb-2">Error:</h3>
-              <pre className="text-red-700 text-sm overflow-auto">{JSON.stringify(error, null, 2)}</pre>
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+            <h2 className="text-lg font-semibold text-red-800 mb-2">Error</h2>
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* Shop Info */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Shop Informatie</h2>
+          {shopInfo ? (
+            <div className="space-y-2">
+              <p><strong>Naam:</strong> {shopInfo.name}</p>
+              <p><strong>Beschrijving:</strong> {shopInfo.description}</p>
+              <p><strong>Domein:</strong> {shopInfo.primaryDomain.host}</p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Products */}
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Producten ({productsData?.edges?.length || 0})</h3>
-                {productsData?.edges ? (
-                  <div className="space-y-2">
-                    {productsData.edges.map((edge: any, index: number) => (
-                      <div key={edge.node.id} className="border border-gray-200 rounded-lg p-3">
-                        <div className="font-medium">{edge.node.title}</div>
-                        <div className="text-sm text-gray-600">Handle: {edge.node.handle}</div>
-                        <div className="text-sm text-gray-600">
-                          Prijs: {edge.node.priceRange.minVariantPrice.amount} {edge.node.priceRange.minVariantPrice.currencyCode}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600">Geen producten gevonden</p>
-                )}
-              </div>
-
-              {/* Collections */}
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Collecties ({collectionsData?.edges?.length || 0})</h3>
-                {collectionsData?.edges ? (
-                  <div className="space-y-2">
-                    {collectionsData.edges.map((edge: any, index: number) => (
-                      <div key={edge.node.id} className="border border-gray-200 rounded-lg p-3">
-                        <div className="font-medium">{edge.node.title}</div>
-                        <div className="text-sm text-gray-600">Handle: {edge.node.handle}</div>
-                        <div className="text-sm text-gray-600">Producten: {edge.node.productsCount}</div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600">Geen collecties gevonden</p>
-                )}
-              </div>
-            </div>
+            <p className="text-gray-500">Geen shop informatie beschikbaar</p>
           )}
         </div>
 
-        {/* Raw Data */}
-        <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Raw API Response</h2>
-          <div className="bg-gray-100 rounded-lg p-4 overflow-auto max-h-96">
-            <pre className="text-sm">
-              {JSON.stringify({ products: productsData, collections: collectionsData }, null, 2)}
-            </pre>
-          </div>
+        {/* Products */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Producten ({products.length})</h2>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products.map((product) => (
+                <div key={product.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{product.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+                  <p className="text-blue-600 font-medium">
+                    €{product.priceRange.minVariantPrice.amount}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Geen producten gevonden</p>
+          )}
+        </div>
+
+        {/* Collections */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Collecties ({collections.length})</h2>
+          {collections.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {collections.map((collection) => (
+                <div key={collection.id} className="border border-gray-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">{collection.title}</h3>
+                  <p className="text-sm text-gray-600">{collection.description}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Geen collecties gevonden</p>
+          )}
         </div>
       </div>
     </div>
